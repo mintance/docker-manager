@@ -1,4 +1,38 @@
-system:
+# TCP Server configuration for console client.
+client:
   listen_port: 7717
   listen_host: 127.0.0.1
-  config_path: ~/Work/go-projects/src/docker-daemon
+# TCP Cluster configuration.
+# Planned in Version 2: When we will able to beat kubernetes :)
+cluster:
+  listen_port: 7780
+  listen_host: 0.0.0.0
+  accept_hosts: []
+system:
+  # There are configs with containers & pod's description.
+  # If u clean this path, system will fuck out.
+  configs_path: ../tests/conf.d/
+# Persistent storage driver and configuration
+# Here we store active containers, save new containers, remove old. Useful when docker-manager restarts to find last state.
+storage:
+  driver: redis # in plans: etcd, memcache, zookeeper, drive
+  credentials:
+    host: 127.0.0.1
+    port: 11111
+# If u use docker secrets, here are settings.
+docker-secrets:
+  path:
+# If need we can flush metrics to graphite.
+metrics:
+  driver: graphite
+  credentials:
+    host:
+    port:
+# We love ELK, so u can put your logs to ElasticSearch or LogStash
+logs:
+  driver: elasticsearch
+  credentials:
+    host:
+    port:
+    user:
+    password:
