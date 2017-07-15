@@ -2,7 +2,9 @@ package storage
 
 type Storage interface {
 	Get(key string) (string, error)
+	GetMap(key string) (map[string]interface{}, error)
 	Set(key string, value string) error
+	SetMap(key string, data map[string]interface{}) error
 	Delete(key string) error
 }
 

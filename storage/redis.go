@@ -7,11 +7,12 @@ import (
 )
 
 type redisStorage struct {
+	Storage
 	connection *redis.Client
-	credentials Credentials
+	credentials *Credentials
 }
 
-func GetRedisStorage(credentials *Credentials) *redisStorage {
+func GetRedisStorage(credentials *Credentials) Storage {
 
 	host := ""
 
@@ -34,7 +35,7 @@ func GetRedisStorage(credentials *Credentials) *redisStorage {
 		return nil
 	}
 
-	return &redisStorage{
+	return redisStorage{
 		connection: conn,
 		credentials: credentials,
 	}
@@ -46,10 +47,48 @@ func (r redisStorage) Get(key string) (string, error) {
 
 }
 
+func (r redisStorage) GetMap(key string) (map[string]string, error) {
+
+	data, err := r.Get(key)
+
+	data_map := map[string]string{}
+
+	if err != nil {
+
+		return data_map, err
+
+	}
+
+	data_array := strings.Split(data, "&")
+
+	for _, item := range data_array {
+
+		item_array := strings.Split(item, "=")
+
+		data_map[item_array[0]] = item_array[1]
+
+	}
+
+	return data_map, nil
+}
+
 func (r redisStorage) Set(key string, value string) error {
 
 	return r.connection.Cmd("SET", key, value).Err
 
+}
+
+func (r redisStorage) SetMap(key string, value map[string]string) error {
+
+	data_array := []string{}
+
+	for key, value := range value {
+
+		data_array = append(data_array, strings.Join([]string{key, value}, "="))
+
+	}
+
+	return r.Set(key, strings.Join(data_array, "&"))
 }
 
 func (r redisStorage) Delete(key string) error {
