@@ -5,7 +5,7 @@ import (
 	"github.com/Sirupsen/logrus"
 )
 
-func startServer(host string, port string) {
+func startClientServer(host string, port string) {
 
 	ln, err := net.Listen("tcp", host + ":" + port)
 
