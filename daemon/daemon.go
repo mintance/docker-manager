@@ -6,8 +6,16 @@ var config *Config
 
 func main()  {
 
+	// Get all main config data.
 	config = getConfig()
 
-	startServer(config.System.Host, config.System.Port)
+	// Let's see if we have some configurations.
+
+	// Let's sync active containers with our plans.
+
+	// Start monitoring containers.
+
+	// We need to listen client sometimes.
+	startClientServer(config.Client.Host, config.Client.Port)
 
 }
